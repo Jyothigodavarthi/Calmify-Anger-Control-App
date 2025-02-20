@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calmify - Anger Control App</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(145deg, #e6f1f8, #f2f6fa);
+            color: white;
+            margin: 0;
+            overflow: hidden;
+        }
+        .slideshow-container {
+    display: flex;
+    overflow: hidden;
+    transition: transform 0.5s ease-in-out;
+    width: calc(100vw * 9); /* Adjusts based on the number of slides */
+}
+
+
+.slide {
+    width: 100vw; /* Each slide should take full viewport width */
+    flex-shrink: 0;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+}
+
+
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+        }
+        .btn:hover { background: #2980b9; }
+        .nav-buttons {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .nav-btn {
+            background: #2ecc71;
+            color: white;
+            padding: 10px 15px;
+            margin: 0 10px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .nav-btn:hover { background: #27ae60; }
+        .quote-container { margin-top: 20px; font-size: 18px; font-weight: bold; }
+        canvas { max-width: 90%; margin-top: 20px; }
+        .input-field {
+            padding: 10px;
+            margin: 10px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .question { margin-bottom: 10px; font-size: 18px; }
+
+        .music-controls {
+        display: flex;
+        gap: 10px; /* Space between buttons */
+        justify-content: center; /* Align in center */
+        margin-top: 10px;
+    }
+    
+    .small-btn {
+        padding: 8px 12px;
+        font-size: 16px;
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .small-btn:hover {
+        background-color: #45a049;
+    }
+    textarea {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+@keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.5; }
+}
+#breathing-animation {
+    font-size: 24px;
+    animation: breathe 4s infinite ease-in-out;
+}
+.slide:nth-child(1) {
+    background-image: url('image1.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.slide:nth-child(2) {
+    background-image: url('image2.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.slide:nth-child(3) {
+    background-image: url('image3.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.slide:nth-child(4) {
+    background-image: url('image4.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.slide:nth-child(5) {
+    background-image: url('image5.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.slide:nth-child(6) {
+    background-image: url('image6.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.slide:nth-child(7) {
+    background-image: url('image7.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.slide:nth-child(8) {
+    background-image: url('image8.jpg');
+    background-size: cover;
+    background-position: center;
+}
+.slide:nth-child(9) {
+    background-image: url('image9.jpg');
+    background-size: cover;
+    background-position: center;
+}
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+    .input-field, .btn {
+        width: 90%;
+        max-width: 250px;
+    }
+    .nav-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+@media (max-width: 600px) {
+    .nav-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .nav-btn {
+        width: 80%;
+        max-width: 200px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="slideshow-container" id="slideshow">
+        <div class="slide">
+            <h2>Login to Calmify</h2>
+            <input type="text" id="username" class="input-field" placeholder="Username">
+            <input type="password" id="password" class="input-field" placeholder="Password">
+            <button class="btn" onclick="login()">Login</button>
+            <p>New User? <button class="btn" onclick="showSignUp()">Sign Up</button></p>
+        </div>
+        
+        <div class="slide">
+            <h2>Sign Up for Calmify</h2>
+            <input type="text" id="new-username" class="input-field" placeholder="Enter Username">
+            <input type="password" id="new-password" class="input-field" placeholder="Create Password">
+            <input type="password" id="confirm-password" class="input-field" placeholder="Confirm Password">
+            <button class="btn" onclick="register()">Register</button>
+        </div>
+        
+        <div class="slide">
+            <h1>Welcome to Calmify</h1>
+            <p>Track your anger, relax, and improve your emotional well-being.</p>
+            <button class="btn" onclick="nextSlide()">Get Started</button>
+        </div>
+        <div class="slide">
+            <h2>Anger Level Assessment</h2>
+            <p>Answer a few questions to assess your anger level.</p>
+            <button class="btn" onclick="startQuiz()">Start Quiz</button>
+            <div id="quiz-container" class="quiz-container">
+                <div class="question" id="question"></div>
+                <div id="options"></div>
+            </div>
+            <div id="quiz-result"></div>
+        </div>
+        <div class="slide" id="slide-2">
+    <h2>Trigger Analysis</h2>
+    <p>Identify what triggered your anger.</p>
+
+    <label for="trigger-category" style="display: block; margin-bottom: 8px;">Select a Trigger Category:</label>
+    <select id="trigger-category" style="margin-bottom: 15px; padding: 5px; width: 100%; max-width: 250px;">
+        <option value="select">Select</option>
+        <option value="work">Work</option>
+        <option value="relationships">Relationships</option>
+        <option value="stress">Stress</option>
+        <option value="others">Others</option>
+    </select>
+
+    <button class="btn" onclick="saveTriggerCategory()">Save</button>
+
+    <div id="trigger-message" style="margin-top: 10px;"></div>
+</div>
+
+
+<div class="slide">
+    <h2>Anger Journal</h2>
+    <textarea id="journal-entry" placeholder="Write about what triggered your anger..." rows="5" style="width: 100%; max-width: 400px; padding: 8px;"></textarea>
+    <button class="btn" onclick="submitJournal()" style="margin-top: 15px;">Submit</button>
+</div>
+
+        <div class="slide">
+            <h2>Guided Breathing</h2>
+            <p>Follow the inhale-exhale animation to relax.</p>
+            <div id="breathing-animation">Breathe In...</div>
+            
+           <!-- Music Selection -->
+<select id="musicSelector" class="small-btn">
+    <option value="https://mp3teluguwap.net/mp3/2020/Bheeshma%20(2020)/Bheeshma%20(2020)/05%20-%20Hey%20Choosa%20-%20SenSongsMp3.Co.mp3">Soothing Melody 🎵</option>
+    <option value="https://pagallworld.co.in/wp-content/uploads/2023/10/Nuvvu-Unte-Naa-Jathaga.mp3">Relaxing Music 🎶</option>
+    <option value="https://sencloud.online/mp3/Telugu%20Mp3/atoz/2000to2009/S/Sakhi%20(2000)/06%20-%20Pachchadanamey%20-%20SenSongsMp3.co.mp3">Nature Music 🌿</option>
+    <option value="https://sencloud.online/mp3/Telugu%20Mp3/All/Orange(2010)/2-Chilipiga-SenSongsMp3.Co.mp3">Peaceful Vibes 🎼</option>
+    <option value="https://pagalfree.com/download/128-Tum%20Hi%20Ho%20-%20Aashiqui%202%20128%20Kbps.mp3">Calm Beats 🎶</option>
+    <option value="https://pagallworld.co.in/wp-content/uploads/2023/04/Om-Karam-Srusti-Saram.mp3">Devotional Music </option>
+    
+    
+</select>
+
+<!-- Audio Element -->
+<audio id="audioPlayer"></audio>
+
+<!-- Music Controls -->
+<div class="music-controls">
+    <button class="small-btn" onclick="playMusic()">▶</button>
+    <button class="small-btn" onclick="pauseMusic()">⏸</button>
+    <button class="small-btn" onclick="stopMusic()">⏹</button>
+</div>
+        </div>
+        
+        <div class="slide">
+            <h2>Progress Tracker</h2>
+            <canvas id="angerChart"></canvas>
+        </div>
+        <div class="slide">
+            <h2>Daily Inspiration</h2>
+            <div class="quote-container" id="quote"></div>
+            <button class="btn" onclick="getQuote()">New Quote</button>
+        </div>
+    </div>
+    <div class="nav-buttons">
+        <button class="nav-btn" onclick="prevSlide()">Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next</button>
+    </div>
+    <script>
+let slideIndex = 0;
+const slides = document.querySelectorAll(".slide");
+const slideshow = document.getElementById("slideshow");
+let isLoggedIn = false; // Track login status
+
+function updateSlide() {
+    slideshow.style.transform = `translateX(-${slideIndex * 100}vw)`;
+    slideshow.style.transition = "transform 0.5s ease-in-out";
+}
+
+function nextSlide() {
+    if (slideIndex < slides.length - 1) {
+        if (!isLoggedIn && slideIndex > 0) {
+            alert("Please log in first!");
+            slideIndex = 0; // Redirect to login slide
+            updateSlide();
+            return; // Stop execution to prevent moving forward
+        }
+        slideIndex++;
+        updateSlide();
+    }
+}
+
+
+function prevSlide() {
+    if (slideIndex > 0) {
+        slideIndex--;
+        updateSlide();
+    }
+}
+
+function login() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const registeredUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+    // Check if the user exists
+    const userExists = registeredUsers.find(user => user.username === username && user.password === password);
+
+    if (userExists) {
+        isLoggedIn = true;
+        slideIndex = 2; // Redirect to Home Slide
+        updateSlide();
+    } else {
+        alert("Invalid credentials or user not found! Please register first.");
+        slideIndex = 1; // Redirect to Register Slide
+        updateSlide();
+    }
+}
+
+
+function register() {
+    const newUsername = document.getElementById("new-username").value;
+    const newPassword = document.getElementById("new-password").value;
+    const confirmPassword = document.getElementById("confirm-password").value;
+    
+    if (!newUsername || !newPassword || !confirmPassword) {
+        alert("Please fill all fields.");
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    const userExists = users.some(user => user.username === newUsername);
+    
+    if (userExists) {
+        alert("Username already exists! Please log in.");
+        slideIndex = 0; // Go to login slide
+        updateSlide();
+        return;
+    }
+    
+    users.push({ username: newUsername, password: newPassword });
+    localStorage.setItem("users", JSON.stringify(users));
+    alert("Registration successful! Please log in.");
+    slideIndex = 0; // Go to login slide
+    updateSlide();
+}
+
+// Disable navigation buttons for Login & Register slides
+function disableNavigationForAuthSlides() {
+    if (slideIndex === 0 || slideIndex === 1) {
+        document.querySelector(".prev-button").style.display = "none";
+        document.querySelector(".next-button").style.display = "none";
+    } else {
+        document.querySelector(".prev-button").style.display = "block";
+        document.querySelector(".next-button").style.display = "block";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    disableNavigationForAuthSlides();
+    updateSlide();
+});
+
+// Handle touch events
+slideshow.addEventListener("touchstart", (event) => {
+    touchStartX = event.touches[0].clientX;
+});
+
+slideshow.addEventListener("touchmove", (event) => {
+    touchEndX = event.touches[0].clientX;
+});
+
+slideshow.addEventListener("touchend", () => {
+    let swipeDistance = touchStartX - touchEndX;
+    let swipeThreshold = 50; // Minimum distance for a swipe
+
+    if (swipeDistance > swipeThreshold) {
+        nextSlide(); // Swipe left → Next slide
+    } else if (swipeDistance < -swipeThreshold) {
+        prevSlide(); // Swipe right → Previous slide
+    }
+});
+function saveTriggerCategory() {
+    const categoryDropdown = document.getElementById("trigger-category");
+    const selectedCategory = categoryDropdown.value;
+    const messageDiv = document.getElementById("trigger-message");
+
+    let message = "";
+    if (selectedCategory === "work") {
+      message = "<p>Your anger might be work-related. Consider taking short breaks.</p>";
+    } else if (selectedCategory === "relationships") {
+      message = "<p>Relationship conflicts can be stressful. Try open communication.</p>";
+    } else if (selectedCategory === "stress") {
+      message = "<p>Stress is a common trigger. Deep breathing might help.</p>";
+    } else if (selectedCategory === "others") {
+      message = "<p>Anger can come from different sources. Identify and manage it effectively.</p>";
+    } else {
+      message = "<p>Please select a trigger category.</p>";
+    }
+
+    messageDiv.innerHTML = message;
+}
+function playMusic() {
+    let audioPlayer = document.getElementById("audioPlayer");
+    let selectedMusic = document.getElementById("musicSelector").value;
+    if (audioPlayer.src !== selectedMusic) {
+        audioPlayer.src = selectedMusic;
+    }
+    audioPlayer.play();
+}
+
+function pauseMusic() {
+    document.getElementById("audioPlayer").pause();
+}
+
+function stopMusic() {
+    let audioPlayer = document.getElementById("audioPlayer");
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+}
+
+        function assessAnger() {
+            const levels = ["Calm", "Moderate", "High Anger"];
+            document.getElementById("quiz-result").innerText = "Your anger level: " + levels[Math.floor(Math.random() * levels.length)];
+        }
+        let currentQuestionIndex = 0;
+const questions = [
+    { question: "How often do you feel angry?", options: ["Rarely", "Sometimes", "Often", "Always"] },
+    { question: "What triggers your anger the most?", options: ["Work", "Family", "Traffic", "Other"] },
+    { question: "How do you usually calm down?", options: ["Deep breathing", "Counting", "Walking away", "Shouting"] }
+];
+
+function startQuiz() {
+    currentQuestionIndex = 0; // Reset to the first question
+    document.getElementById("quiz-container").style.display = "block";
+    showQuestion();
+}
+
+function showQuestion() {
+    const q = questions[currentQuestionIndex];
+    document.getElementById("question").innerText = q.question;
+    document.getElementById("options").innerHTML = q.options
+        .map(option => `<button class='btn' onclick='saveAnswer("${option}")'>${option}</button>`)
+        .join(" ");
+}
+
+function saveAnswer(answer) {
+    console.log(`Saved: ${answer}`);
+    nextQuestion();
+}
+
+function nextQuestion() {
+    if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        showQuestion();
+    } else {
+        document.getElementById("quiz-result").innerText = "Quiz Completed!";
+        document.getElementById("quiz-container").style.display = "none";
+    }
+}
+
+        function submitJournal() {
+            alert("Your journal entry has been saved!");
+        }
+        function getQuote() {
+            const quotes = [
+                "Calmness is the cradle of power.",
+                "Breathe in peace, breathe out stress.",
+                "Nothing gives one person so much advantage over another as to remain always cool and unruffled.",
+                "Holding onto anger is like drinking poison and expecting the other person to die."
+            ];
+            document.getElementById("quote").innerText = quotes[Math.floor(Math.random() * quotes.length)];
+        }
+        
+function drawChart() {
+    const ctx = document.getElementById("angerChart").getContext("2d");
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5"],
+            datasets: [{
+                label: "Anger Level",
+                data: [4, 3, 5, 2, 1],
+                borderColor: "#e74c3c",
+                fill: false
+            }]
+        }
+    });
+}
+document.addEventListener("DOMContentLoaded", drawChart);
+
+async function getQuote() {
+    try {
+        let response = await fetch("https://api.quotable.io/random");
+        let data = await response.json();
+        document.getElementById("quote").innerText = data.content;
+    } catch (error) {
+        document.getElementById("quote").innerText = "Stay calm and carry on!";
+    }
+}
+    </script>
+</body>
+</html>
