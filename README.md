@@ -6,7 +6,7 @@
 ## Live Website  
    You can view the live demo of the Calmify-Anger-Control-Web-App here :
    
-   **Live Website Link** : [Calmify Live Demo](https://jyothigodavarthi.github.io/Calmify-Anger-Control-App/) 
+   **Live Website Link** : [Calmify Live Demo](https://jyothigodavarthi.github.io/Calmify-Anger-Control-App/)
 
 ## Tech Stack  
 - **Frontend:** HTML, CSS, JavaScript  
